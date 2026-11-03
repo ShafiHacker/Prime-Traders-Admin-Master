@@ -111,12 +111,11 @@
 
         function openPortal(type) {
             if (type === 'logistics') {
-                alert("Opening Logistics & Courier Dashboard...");
-                // Yahan hum logistics wale page ya view par redirect karenge
+                window.location.href = "logistics.html";
             } else if (type === 'whitelabel') {
-                alert("Opening White Label & Catalog Dashboard...");
-                // Yahan hum white label wale page ya view par redirect karenge
+                window.location.href = "whitelabel.html";
             }
+        }
         }
 
         function handleAdminLogout() {
