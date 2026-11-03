@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin Portal | Prime Traders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(5, 5, 5, 0.98));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .admin-card:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.25);
+        }
+        .portal-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            transition: all 0.3s ease;
+        }
+        .portal-btn:hover {
+            filter: brightness(1.15);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-black text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Admin Header -->
+    <header class="bg-slate-950 border-b border-blue-500/30 sticky top-0 z-40 px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-lg shadow-md shadow-blue-500/30">P</div>
+            <div>
+                <h1 class="text-xs font-black tracking-wider uppercase text-white leading-none">PRIME TRADERS</h1>
+                <p class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest mt-1">Master Control Panel</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="adminSessionEmail" class="text-xs text-slate-400 font-mono hidden sm:inline">Checking session...</span>
+            <button onclick="handleAdminLogout()" class="bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-500/40 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container / Selection Screen -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-12 flex flex-col justify-center items-center space-y-8">
+        
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-wide">Select Management Portal</h2>
+            <p class="text-xs text-slate-400">Please choose which administrative module you want to access today.</p>
+        </div>
+
+        <!-- 2 Main Portal Selection Buttons Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl">
+            
+            <!-- Logistics Portal Button Card -->
+            <div onclick="openPortal('logistics')" class="admin-card p-8 rounded-2xl cursor-pointer flex flex-col items-center text-center space-y-4 group">
+                <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-cyan-400 text-2xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-white uppercase tracking-wider">Logistics & Courier</h3>
+                    <p class="text-xs text-slate-400 mt-1">Manage shipments, tracking pools, DC rates, petrol updates, and rider zones.</p>
+                </div>
+                <button class="portal-btn w-full py-2.5 rounded-xl text-xs font-black uppercase text-white tracking-wider shadow">
+                    Open Logistics Portal <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- White Label Portal Button Card -->
+            <div onclick="openPortal('whitelabel')" class="admin-card p-8 rounded-2xl cursor-pointer flex flex-col items-center text-center space-y-4 group">
+                <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl group-hover:scale-110 transition">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-white uppercase tracking-wider">White Label & Catalog</h3>
+                    <p class="text-xs text-slate-400 mt-1">Manage wholesale products, orders, active user approvals, and financial metrics.</p>
+                </div>
+                <button class="portal-btn w-full py-2.5 rounded-xl text-xs font-black uppercase text-white tracking-wider shadow">
+                    Open White Label Portal <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-blue-500/20 py-4 text-center text-slate-500 text-[11px]">
+        © 2026 Prime Traders Master System. All Rights Reserved.
+    </footer>
+
+    <!-- Firebase SDKs & Script -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        // Simple Auth Check
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = "login.html";
+            } else {
+                const display = document.getElementById('adminSessionEmail');
+                if (display) display.innerText = `Logged in: ${user.email}`;
+            }
+        });
+
+        function openPortal(type) {
+            if (type === 'logistics') {
+                alert("Opening Logistics & Courier Dashboard...");
+                // Yahan hum logistics wale page ya view par redirect karenge
+            } else if (type === 'whitelabel') {
+                alert("Opening White Label & Catalog Dashboard...");
+                // Yahan hum white label wale page ya view par redirect karenge
+            }
+        }
+
+        function handleAdminLogout() {
+            auth.signOut().then(() => window.location.href = "login.html");
+        }
+    </script>
+</body>
+</html>
