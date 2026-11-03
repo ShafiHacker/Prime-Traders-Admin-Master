@@ -28,13 +28,12 @@
             </div>
         </div>
         <nav class="flex-1 py-4 space-y-1 overflow-y-auto text-xs font-bold">
-            <a onclick="showTab('dashboard')" class="nav-link active flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-gauge w-5 text-cyan-400"></i> Dashboard</a>
-            <a onclick="switchRiderZone('Rider Korangi')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-motorcycle w-5 text-blue-400"></i> Rider Korangi</a>
-            <a onclick="switchRiderZone('Rider Shahrah Faisal')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-motorcycle w-5 text-indigo-400"></i> Rider Shahrah Faisal</a>
+            <a onclick="switchZoneDashboard('All Karachi')" class="nav-link active flex items-center gap-3 px-6 py-3 text-slate-300" id="navDashboard"><i class="fa-solid fa-gauge w-5 text-cyan-400"></i> Dashboard</a>
+            <a onclick="switchZoneDashboard('Rider Korangi')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navKorangi"><i class="fa-solid fa-motorcycle w-5 text-blue-400"></i> Rider Korangi</a>
+            <a onclick="switchZoneDashboard('Rider Shahrah Faisal')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navFaisal"><i class="fa-solid fa-motorcycle w-5 text-indigo-400"></i> Rider Shahrah Faisal</a>
             <a onclick="showTab('petrol')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-gas-pump w-5 text-amber-400"></i> Daily Petrol Rate</a>
             <a onclick="showTab('dcReports')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-route w-5 text-emerald-400"></i> DC KM & Reports</a>
-            <a href="whitelabel.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-store w-5 text-purple-400"></i> White Label Portal</a>
-            <a href="index.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300"><i class="fa-solid fa-arrow-left w-5 text-rose-400"></i> Master Menu</a>
+            <a href="index.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300 border-t border-blue-500/10 mt-4"><i class="fa-solid fa-arrow-left w-5 text-rose-400"></i> Master Menu</a>
         </nav>
         <div class="p-4 border-t border-blue-500/20">
             <button onclick="auth.signOut().then(() => window.location.href = 'login.html')" class="w-full bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-500/40 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
@@ -66,7 +65,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/60 p-5 rounded-2xl border border-blue-500/20">
                 <div>
                     <h2 class="text-lg font-black text-white uppercase tracking-wider"><i class="fa-solid fa-truck-ramp-box text-cyan-400 mr-2"></i> Logistics Operations & Shipments Hub</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Manage live bookings, tracking pools, courier settlements, and daily petrol rates seamlessly.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Manage zone shipments, custom tracking pools, and courier settlements seamlessly.</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="openManualParcelModal()" class="action-btn px-4 py-2 rounded-xl text-xs font-black uppercase text-white shadow"><i class="fa-solid fa-plus mr-1.5"></i> Create New Parcel</button>
@@ -161,7 +160,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: DAILY PETROL RATE & HISTORY -->
+            <!-- TAB 2: DAILY PETROL RATE -->
             <div id="tabPetrol" class="space-y-6 hidden">
                 <div class="stat-card p-8 rounded-2xl space-y-6 max-w-2xl mx-auto">
                     <div class="flex justify-between items-center border-b border-blue-500/20 pb-3">
@@ -180,7 +179,7 @@
                 </div>
             </div>
 
-            <!-- TAB 3: DC KM & LOGISTICS REPORTS -->
+            <!-- TAB 3: DC KM & REPORTS -->
             <div id="tabDcReports" class="space-y-6 hidden">
                 <div class="stat-card p-8 rounded-2xl space-y-6 max-w-2xl mx-auto">
                     <div class="flex justify-between items-center border-b border-blue-500/20 pb-3">
@@ -202,7 +201,7 @@
         <div class="pool-modal w-full max-w-lg p-6 rounded-2xl space-y-4 shadow-2xl relative">
             <button onclick="closeTrackingPoolModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-sm font-black text-purple-400 uppercase tracking-wider"><i class="fa-solid fa-barcode mr-2"></i> Custom Tracking IDs Pool Storage</h3>
-            <p class="text-xs text-slate-300">Enter custom tracking consignment IDs line by line (e.g. PT-90001). These will be assigned to customer orders automatically during checkout.</p>
+            <p class="text-xs text-slate-300">Enter custom tracking consignment IDs line by line (e.g. PT-90001). These will be assigned to customer orders automatically during checkout[cite: 13].</p>
             <textarea id="trackingPoolInput" rows="6" placeholder="PT-90001
 PT-90002
 PT-90003..." class="w-full p-3 bg-black/80 border border-purple-500/30 rounded-xl text-purple-300 font-mono text-xs outline-none"></textarea>
@@ -216,6 +215,8 @@ PT-90003..." class="w-full p-3 bg-black/80 border border-purple-500/30 rounded-x
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script>
+        let currentSelectedZone = 'All Karachi';
+
         auth.onAuthStateChanged((user) => {
             if (!user) window.location.href = "login.html";
             else {
@@ -230,16 +231,30 @@ PT-90003..." class="w-full p-3 bg-black/80 border border-purple-500/30 rounded-x
             document.getElementById('tabPetrol').classList.add('hidden');
             document.getElementById('tabDcReports').classList.add('hidden');
 
-            // Reset active classes
             document.querySelectorAll('aside nav a').forEach(el => el.classList.remove('active'));
 
             if(tabName === 'dashboard') {
                 document.getElementById('tabDashboard').classList.remove('hidden');
+                document.getElementById('navDashboard').classList.add('active');
             } else if(tabName === 'petrol') {
                 document.getElementById('tabPetrol').classList.remove('hidden');
             } else if(tabName === 'dcReports') {
                 document.getElementById('tabDcReports').classList.remove('hidden');
             }
+        }
+
+        function switchZoneDashboard(zone) {
+            currentSelectedZone = zone;
+            document.getElementById('activeZoneBadge').innerText = `Active Zone: ${zone}`;
+            showTab('dashboard');
+
+            // Highlight active menu item
+            document.querySelectorAll('aside nav a').forEach(el => el.classList.remove('active'));
+            if(zone === 'All Karachi') document.getElementById('navDashboard').classList.add('active');
+            else if(zone.includes('Korangi')) document.getElementById('navKorangi').classList.add('active');
+            else if(zone.includes('Faisal')) document.getElementById('navFaisal').classList.add('active');
+
+            loadLogisticsDashboard();
         }
 
         function loadLogisticsDashboard() {
@@ -252,11 +267,20 @@ PT-90003..." class="w-full p-3 bg-black/80 border border-purple-500/30 rounded-x
                 let html = '';
                 let totalCods = 0, delivered = 0, pending = 0, inTransit = 0, returned = 0, cancelled = 0, newBookings = 0;
                 let codReceived = 0, pendingCod = 0;
+                let zoneCount = 0;
                 const customers = new Set();
 
                 snapshot.forEach(doc => {
                     const o = doc.data();
                     const id = doc.id;
+
+                    // Filter by zone if specific rider zone is selected
+                    const orderZone = o.zone || o.courierZone || 'All Karachi';
+                    if (currentSelectedZone !== 'All Karachi' && !orderZone.toLowerCase().includes(currentSelectedZone.toLowerCase().replace('rider ', ''))) {
+                        return; // Skip if doesn't match selected zone
+                    }
+
+                    zoneCount++;
                     const amt = parseFloat(o.totalAmount || o.totalCod || 0);
                     totalCods += amt;
                     if(o.customerPhone) customers.add(o.customerPhone);
@@ -282,26 +306,25 @@ PT-90003..." class="w-full p-3 bg-black/80 border border-purple-500/30 rounded-x
                     `;
                 });
 
-                tbody.innerHTML = html;
-                document.getElementById('statTotalShipments').innerText = snapshot.size;
-                document.getElementById('statNewBookings').innerText = newBookings || Math.round(snapshot.size * 0.2);
+                if(zoneCount === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No shipments found for ${currentSelectedZone}.</td></tr>`;
+                } else {
+                    tbody.innerHTML = html;
+                }
+
+                document.getElementById('statTotalShipments').innerText = zoneCount;
+                document.getElementById('statNewBookings').innerText = newBookings;
                 document.getElementById('statPendingShipments').innerText = pending;
-                document.getElementById('statInTransit').innerText = inTransit || Math.round(snapshot.size * 0.3);
+                document.getElementById('statInTransit').innerText = inTransit;
                 document.getElementById('statDelivered').innerText = delivered;
                 document.getElementById('statReturned').innerText = returned;
                 document.getElementById('statCancelled').innerText = cancelled;
-                document.getElementById('statTotalCustomers').innerText = customers.size || snapshot.size;
+                document.getElementById('statTotalCustomers').innerText = customers.size;
                 document.getElementById('statTotalCod').innerText = `PKR ${totalCods}`;
-                document.getElementById('statCodReceived').innerText = `PKR ${codReceived || Math.round(totalCods * 0.7)}`;
-                document.getElementById('statPendingCod').innerText = `PKR ${pendingCod || Math.round(totalCods * 0.3)}`;
+                document.getElementById('statCodReceived').innerText = `PKR ${codReceived}`;
+                document.getElementById('statPendingCod').innerText = `PKR ${pendingCod}`;
                 document.getElementById('statCourierSettlements').innerText = `PKR ${Math.round(totalCods * 0.85)}`;
             });
-        }
-
-        function switchRiderZone(zone) {
-            document.getElementById('activeZoneBadge').innerText = `Active Zone: ${zone}`;
-            showTab('dashboard');
-            alert(`Switched view to ${zone} operations.`);
         }
 
         function openTrackingPoolModal() {
