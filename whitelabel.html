@@ -187,17 +187,17 @@
 
         // Fixed Auth State Check with minor delay to prevent instant premature redirect
         auth.onAuthStateChanged((user) => {
-            if (!user) {
-                setTimeout(() => {
-                    if (!auth.currentUser) {
-                        window.location.href = "index.html";
-                    }
-                }, 1000);
-            } else {
-                const disp = document.getElementById('adminEmailDisplay');
-                if(disp) disp.innerText = `Admin: ${user.email}`;
+    if (!user) {
+        setTimeout(() => {
+            if (!auth.currentUser) {
+                window.location.href = "login.html"; // Agar login nahi hai toh login page par bheje, index.html par nahi
             }
-        });
+        }, 1500);
+    } else {
+        const disp = document.getElementById('adminEmailDisplay');
+        if(disp) disp.innerText = `Admin: ${user.email}`;
+    }
+});
 
         function showSection(sectionId) {
             document.getElementById('heroBannerSection').classList.add('hidden');
