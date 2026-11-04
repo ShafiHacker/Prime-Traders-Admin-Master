@@ -53,7 +53,7 @@
                 <label class="block text-slate-300 mb-1 font-semibold">Email Address</label>
                 <div class="relative">
                     <i class="fa-solid fa-envelope absolute left-3 top-3 text-slate-500"></i>
-                    <input type="email" id="loginEmail" placeholder="user@example.com" required class="w-full pl-9 p-2.5 bg-slate-950/90 border border-slate-700 rounded-lg text-white outline-none focus:border-amber-400 transition">
+                    <input type="email" id="loginEmail" placeholder="admin@primetraders.com" required class="w-full pl-9 p-2.5 bg-slate-950/90 border border-slate-700 rounded-lg text-white outline-none focus:border-amber-400 transition">
                 </div>
             </div>
             <div>
@@ -163,8 +163,28 @@
 
     </div>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
     <!-- Scripts -->
     <script>
+        // Direct Firebase Initialization to ensure auth object is ready
+        const firebaseConfig = {
+            apiKey: "AIzaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
+            authDomain: "prime-traders-f3eec.firebaseapp.com",
+            projectId: "prime-traders-f3eec",
+            storageBucket: "prime-traders-f3eec.firebasestorage.app",
+            messagingSenderId: "499740236001",
+            appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
+            measurementId: "G-6CGVKBZFJK"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('loginPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -227,11 +247,18 @@
 
         function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPassword').value;
+
+            // Sirf Admin ki ID allow karne ki condition
+            if (email !== "admin@primetraders.com") {
+                alert("Access Denied: Sirf Admin ID se login ki ijazat hai!");
+                return;
+            }
+
             auth.signInWithEmailAndPassword(email, pass)
                 .then(() => { 
-                    // Login ke baad ab direct index.html (Master Control Panel) khulega
+                    // Admin login hone ke baad direct Master Control Panel (index.html) khulega
                     window.location.href = 'index.html'; 
                 })
                 .catch(err => { alert("Login Error: " + err.message); });
@@ -253,11 +280,6 @@
                 .catch(err => { alert("Error: " + err.message); });
         }
     </script>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="dashboard.js?v=9.0"></script>
 </body>
 </html>
