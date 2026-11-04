@@ -38,14 +38,14 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script>
         const firebaseConfig = {
-    apiKey: "AIzaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
-    authDomain: "prime-traders-f3eec.firebaseapp.com",
-    projectId: "prime-traders-f3eec",
-    storageBucket: "prime-traders-f3eec.firebasestorage.app",
-    messagingSenderId: "499740236001",
-    appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
-    measurementId: "G-6CGVKBZFJK"
-};
+            apiKey: "AIzaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
+            authDomain: "prime-traders-f3eec.firebaseapp.com",
+            projectId: "prime-traders-f3eec",
+            storageBucket: "prime-traders-f3eec.firebasestorage.app",
+            messagingSenderId: "499740236001",
+            appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
+            measurementId: "G-6CGVKBZFJK"
+        };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
@@ -56,7 +56,7 @@
 
             auth.signInWithEmailAndPassword(email, pass)
             .then(() => {
-                window.location.href = "index.html"; // Login ke baad 2nd screen (Master Control Panel) khulegi
+                window.location.href = "index.html";
             })
             .catch(err => alert("Login Failed: " + err.message));
         }
