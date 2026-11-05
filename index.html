@@ -122,10 +122,10 @@
             }
 
             auth.signInWithEmailAndPassword(email, pass)
-                .then(() => {  
-                    // Yahan index.html ki jagah logistics.html kar diya hai
-                    window.location.href = 'logistics.html';  
-                })
+    .then(() => {  
+        // Login hote hi seedha 2-buttons wala Hub page khulega
+        window.location.href = 'whitelabel.html';  
+    })
                 .catch(err => {  
                     alert("Login Error: " + err.message);  
                 });
