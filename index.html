@@ -75,14 +75,14 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <!-- Scripts & Firebase Initialization -->
     <script>
-        // Firebase Configuration (Directly updated from your project settings)
+        // Bilkul fresh aur theek config object
         const firebaseConfig = {
             apiKey: "AIzaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
             authDomain: "prime-traders-f3eec.firebaseapp.com",
@@ -93,7 +93,7 @@
             measurementId: "G-6CGVKBZFJK"
         };
 
-        // Initialize Firebase safely
+        // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
