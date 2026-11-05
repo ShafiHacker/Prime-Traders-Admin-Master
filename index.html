@@ -123,8 +123,7 @@
 
             auth.signInWithEmailAndPassword(email, pass)
     .then(() => {  
-        // Login hote hi seedha 2-buttons wala Hub page khulega
-        window.location.href = 'whitelabel.html';  
+        window.location.href = 'panel.html'; // Login ke baad seedha 2-buttons wala panel khulega
     })
                 .catch(err => {  
                     alert("Login Error: " + err.message);  
