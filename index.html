@@ -23,7 +23,7 @@
 </head>
 <body class="bg-custom-fit min-h-screen w-full flex items-center justify-end p-4 md:p-8 relative">
 
-    <!-- Right Side Clean White Login Box (Matching your exact design) -->
+    <!-- Right Side Clean White Login Box -->
     <div class="bg-white/95 border border-slate-200 p-6 md:p-8 rounded-3xl max-w-md w-full shadow-2xl space-y-5 text-slate-900 backdrop-blur-md relative z-10 mr-0 md:mr-12">
         
         <!-- Logo Header -->
@@ -75,8 +75,30 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Scripts & Firebase Initialization -->
     <script>
+        // Firebase Configuration (Directly updated from your project settings)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
+            authDomain: "prime-traders-f3eec.firebaseapp.com",
+            projectId: "prime-traders-f3eec",
+            storageBucket: "prime-traders-f3eec.firebasestorage.app",
+            messagingSenderId: "499740236001",
+            appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
+            measurementId: "G-6CGVKBZFJK"
+        };
+
+        // Initialize Firebase safely
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('loginPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -105,7 +127,9 @@
                 .then(() => { 
                     window.location.href = 'panel.html'; 
                 })
-                .catch(err => { alert("Login Error: " + err.message); });
+                .catch(err => { 
+                    alert("Login Error: " + err.message); 
+                });
         }
 
         function handleForgotPassword() {
@@ -115,31 +139,13 @@
                 return;
             }
             auth.sendPasswordResetEmail(email)
-                .then(() => { alert("Password reset email bhej di gayi hai!"); })
-                .catch(err => { alert("Error: " + err.message); });
+                .then(() => { 
+                    alert("Password reset email bhej di gayi hai!"); 
+                })
+                .catch(err => { 
+                    alert("Error: " + err.message); 
+                });
         }
-    </script>
-
-    <!-- Firebase SDKs & Verified Config -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCRkKoE48FjYIjYfUNFEYzcxNueKUm6YOM",
-  authDomain: "prime-traders-f3eec.firebaseapp.com",
-  projectId: "prime-traders-f3eec",
-  storageBucket: "prime-traders-f3eec.firebasestorage.app",
-  messagingSenderId: "499740236001",
-  appId: "1:499740236001:web:e623dfe11f6f96df22ffa0",
-  measurementId: "G-6CGVKBZFJK"
-};
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const auth = firebase.auth();
     </script>
 </body>
 </html>
