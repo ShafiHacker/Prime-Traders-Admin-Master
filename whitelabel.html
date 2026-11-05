@@ -30,7 +30,9 @@
             <a onclick="showSection('heroBannerSection')" class="nav-link active flex items-center gap-3 px-6 py-3 text-slate-300" id="navHero"><i class="fa-solid fa-image w-5 text-amber-400"></i> Main Hero Banner</a>
             <a onclick="showSection('footerBannerSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navFooter"><i class="fa-solid fa-rectangle-ad w-5 text-amber-300"></i> Footer Promo Banner</a>
             <a onclick="showSection('addProductSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navAddProduct"><i class="fa-solid fa-square-plus w-5 text-cyan-400"></i> Add Wholesale Product</a>
-            <a href="index.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300 border-t border-amber-500/10 mt-4"><i class="fa-solid fa-arrow-left w-5 text-rose-400"></i> Master Menu</a>
+            
+            <!-- Master Menu ab wapas logistics.html par redirect karega -->
+            <a href="logistics.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300 border-t border-amber-500/10 mt-4"><i class="fa-solid fa-arrow-left w-5 text-rose-400"></i> Master Menu</a>
         </nav>
         <div class="p-4 border-t border-amber-500/20">
             <button onclick="auth.signOut().then(() => window.location.href = 'index.html')" class="w-full bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-500/40 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
@@ -167,7 +169,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script>
-        // Direct Firebase Initialization
         const firebaseConfig = {
             apiKey: "AizaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
             authDomain: "prime-traders-f3eec.firebaseapp.com",
@@ -185,19 +186,18 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // Fixed Auth State Check with minor delay to prevent instant premature redirect
         auth.onAuthStateChanged((user) => {
-    if (!user) {
-        setTimeout(() => {
-            if (!auth.currentUser) {
-                window.location.href = "login.html"; // Agar login nahi hai toh login page par bheje, index.html par nahi
+            if (!user) {
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        window.location.href = "index.html"; 
+                    }
+                }, 1500);
+            } else {
+                const disp = document.getElementById('adminEmailDisplay');
+                if(disp) disp.innerText = `Admin: ${user.email}`;
             }
-        }, 1500);
-    } else {
-        const disp = document.getElementById('adminEmailDisplay');
-        if(disp) disp.innerText = `Admin: ${user.email}`;
-    }
-});
+        });
 
         function showSection(sectionId) {
             document.getElementById('heroBannerSection').classList.add('hidden');
