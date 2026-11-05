@@ -82,7 +82,6 @@
 
     <!-- Scripts & Firebase Initialization -->
     <script>
-        // Bilkul fresh aur theek config object
         const firebaseConfig = {
             apiKey: "AIzaSyAcb38R8nTN-6wJxqy6L5wnB55JQ8qwcjM",
             authDomain: "prime-traders-f3eec.firebaseapp.com",
@@ -93,7 +92,6 @@
             measurementId: "G-6CGVKBZFJK"
         };
 
-        // Initialize Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
@@ -124,11 +122,12 @@
             }
 
             auth.signInWithEmailAndPassword(email, pass)
-                .then(() => { 
-                    window.location.href = 'index.html'; 
+                .then(() => {  
+                    // Yahan index.html ki jagah logistics.html kar diya hai
+                    window.location.href = 'logistics.html';  
                 })
-                .catch(err => { 
-                    alert("Login Error: " + err.message); 
+                .catch(err => {  
+                    alert("Login Error: " + err.message);  
                 });
         }
 
@@ -139,11 +138,11 @@
                 return;
             }
             auth.sendPasswordResetEmail(email)
-                .then(() => { 
-                    alert("Password reset email bhej di gayi hai!"); 
+                .then(() => {  
+                    alert("Password reset email bhej di gayi hai!");  
                 })
-                .catch(err => { 
-                    alert("Error: " + err.message); 
+                .catch(err => {  
+                    alert("Error: " + err.message);  
                 });
         }
     </script>
