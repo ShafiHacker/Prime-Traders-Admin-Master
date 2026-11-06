@@ -187,18 +187,96 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
+        <!-- Firebase SDKs & Embedded Config -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AizaSyCRkkoE48FjYIjYfUNFEYzcxNueKuM6YOM",
+            authDomain: "prime-traders-f3eec.firebaseapp.com",
+            projectId: "prime-traders-f3eec",
+            storageBucket: "prime-traders-f3eec.firebasestorage.app",
+            messagingSenderId: "499740236001",
+            appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
+            measurementId: "G-6CGVKBZFJK"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Auto-redirect removed to keep session active until manual logout
         auth.onAuthStateChanged((user) => {
-            if (!user) {
-                setTimeout(() => {
-                    if (!auth.currentUser) {
-                        window.location.href = "index.html"; 
-                    }
-                }, 1500);
-            } else {
+            if (user) {
                 const disp = document.getElementById('adminEmailDisplay');
                 if(disp) disp.innerText = `Admin: ${user.email}`;
             }
         });
+
+        function showSection(sectionId) {
+            document.getElementById('heroBannerSection').classList.add('hidden');
+            document.getElementById('footerBannerSection').classList.add('hidden');
+            document.getElementById('addProductSection').classList.add('hidden');
+
+            document.querySelectorAll('aside nav a').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            if(sectionId === 'heroBannerSection') document.getElementById('navHero').classList.add('active');
+            else if(sectionId === 'footerBannerSection') document.getElementById('navFooter').classList.add('active');
+            else if(sectionId === 'addProductSection') document.getElementById('navAddProduct').classList.add('active');
+        }
+
+        function saveHeroBanner() {
+            const link = document.getElementById('heroBannerLink').value;
+            db.collection('settings').doc('hero_banner').set({ link: link, updatedAt: new Date() })
+            .then(() => alert("Main Hero Banner settings saved successfully!"));
+        }
+
+        function saveFooterBanner() {
+            const link = document.getElementById('footerBannerLink').value;
+            db.collection('settings').doc('footer_banner').set({ link: link, updatedAt: new Date() })
+            .then(() => alert("Footer Promo Banner settings saved successfully!"));
+        }
+
+        function publishNewProduct() {
+            const title = document.getElementById('prodTitle').value;
+            const category = document.getElementById('prodCategory').value;
+            const retailPrice = document.getElementById('prodRetailPrice').value;
+            const singlePrice = document.getElementById('prodSinglePrice').value;
+            const bulkPrice = document.getElementById('prodBulkPrice').value;
+            const stock = document.getElementById('prodStock').value;
+            const desc = document.getElementById('prodDesc').value;
+
+            if(!title || !retailPrice || !singlePrice || !stock) {
+                alert("Please fill out all required fields (*).");
+                return;
+            }
+
+            db.collection('products').add({
+                title: title,
+                category: category,
+                retailPrice: parseFloat(retailPrice),
+                singlePrice: parseFloat(singlePrice),
+                bulkPrice: parseFloat(bulkPrice || 0),
+                stock: parseInt(stock),
+                description: desc,
+                createdAt: new Date()
+            }).then(() => {
+                alert("Product published successfully to central catalog!");
+                document.getElementById('prodTitle').value = '';
+                document.getElementById('prodRetailPrice').value = '';
+                document.getElementById('prodSinglePrice').value = '';
+                document.getElementById('prodBulkPrice').value = '';
+                document.getElementById('prodStock').value = '';
+                document.getElementById('prodDesc').value = '';
+            }).catch(err => alert("Error adding product: " + err.message));
+        }
+    </script>
 
         function showSection(sectionId) {
             document.getElementById('heroBannerSection').classList.add('hidden');
