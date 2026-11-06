@@ -10,12 +10,13 @@
         .hub-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(3, 7, 18, 0.98)); border: 1px solid rgba(59, 130, 246, 0.3); transition: all 0.3s ease; }
         .hub-card:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); }
         .hub-card-amber:hover { border-color: #f59e0b; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3); }
+        .hub-card-emerald:hover { border-color: #10b981; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); }
     </style>
 </head>
 <body class="bg-[#020617] text-slate-100 min-h-screen flex flex-col items-center justify-center p-6 font-sans">
 
     <!-- Header / Branding -->
-    <div class="text-center space-y-3 mb-10">
+    <div class="text-center space-y-3 mb-8">
         <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center text-white text-3xl shadow-lg shadow-blue-500/30">
             <i class="fa-solid fa-shield-halved"></i>
         </div>
@@ -23,33 +24,43 @@
         <p class="text-xs text-cyan-400 font-bold uppercase tracking-widest">Select Management Portal</p>
     </div>
 
-    <!-- Two Buttons Hub Container -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl w-full">
+    <!-- Hub Buttons Container (3 Buttons) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
         
-        <!-- 1. Logistics Management Button -->
-        <a href="whitelabel.html" class="hub-card hub-card-amber p-8 rounded-3xl ...">
-            <div class="w-16 h-16 rounded-2xl bg-blue-600/20 text-blue-400 border border-blue-500/40 flex items-center justify-center text-2xl group-hover:bg-blue-600 group-hover:text-white transition">
+        <!-- 1. Logistics Management -->
+        <a href="logistics.html" class="hub-card p-6 rounded-3xl flex flex-col items-center text-center space-y-4 group">
+            <div class="w-14 h-14 rounded-2xl bg-blue-600/20 text-blue-400 border border-blue-500/40 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition">
                 <i class="fa-solid fa-truck-fast"></i>
             </div>
-            <h2 class="text-lg font-black text-white uppercase tracking-wider">Logistics Management</h2>
+            <h2 class="text-base font-black text-white uppercase tracking-wider">Logistics Management</h2>
             <p class="text-xs text-slate-400">Manage shipments, track parcels, assign rider zones, and view delivery reports.</p>
-            <span class="text-xs font-bold text-cyan-400 uppercase mt-2 flex items-center gap-1">Open Dashboard <i class="fa-solid fa-arrow-right"></i></span>
+            <span class="text-[11px] font-bold text-cyan-400 uppercase mt-2 flex items-center gap-1">Open Dashboard <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
-        <!-- 2. White Label Management Button -->
-        <a href="whitelabel.html" class="hub-card hub-card-amber p-8 rounded-3xl flex flex-col items-center text-center space-y-4 group">
-            <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+        <!-- 2. White Label Management -->
+        <a href="whitelabel.html" class="hub-card hub-card-amber p-6 rounded-3xl flex flex-col items-center text-center space-y-4 group">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-slate-950 transition">
                 <i class="fa-solid fa-store"></i>
             </div>
-            <h2 class="text-lg font-black text-white uppercase tracking-wider">White Label Management</h2>
+            <h2 class="text-base font-black text-white uppercase tracking-wider">White Label Management</h2>
             <p class="text-xs text-slate-400">Manage store catalog, upload wholesale products, and configure promo banners.</p>
-            <span class="text-xs font-bold text-amber-400 uppercase mt-2 flex items-center gap-1">Open Management <i class="fa-solid fa-arrow-right"></i></span>
+            <span class="text-[11px] font-bold text-amber-400 uppercase mt-2 flex items-center gap-1">Open Management <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <!-- 3. Business & Operations Hub (New Dashboard) -->
+        <a href="business.html" class="hub-card hub-card-emerald p-6 rounded-3xl flex flex-col items-center text-center space-y-4 group">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-slate-950 transition">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <h2 class="text-base font-black text-white uppercase tracking-wider">Business & Operations Hub</h2>
+            <p class="text-xs text-slate-400">Orders, Catalog, Wallet, COD Payments, Reports, Support, and Settings.</p>
+            <span class="text-[11px] font-bold text-emerald-400 uppercase mt-2 flex items-center gap-1">Open Hub <i class="fa-solid fa-arrow-right"></i></span>
         </a>
 
     </div>
 
     <!-- Logout Button at Bottom -->
-    <div class="mt-10">
+    <div class="mt-8">
         <button onclick="auth.signOut().then(() => window.location.href = 'index.html')" class="bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-500/40 px-6 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
             <i class="fa-solid fa-right-from-bracket"></i> Logout Admin
         </button>
@@ -71,12 +82,7 @@
         };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const auth = firebase.auth();
-
-        auth.onAuthStateChanged((user) => {
-            if (!user) {
-                window.location.href = "index.html";
-            }
-        });
+        // Auto-redirect removed to keep session active until manual logout
     </script>
 </body>
 </html>
