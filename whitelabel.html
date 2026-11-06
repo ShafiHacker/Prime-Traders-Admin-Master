@@ -30,6 +30,7 @@
             <a onclick="showSection('heroBannerSection')" class="nav-link active flex items-center gap-3 px-6 py-3 text-slate-300" id="navHero"><i class="fa-solid fa-image w-5 text-amber-400"></i> Main Hero Banner</a>
             <a onclick="showSection('footerBannerSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navFooter"><i class="fa-solid fa-rectangle-ad w-5 text-amber-300"></i> Footer Promo Banner</a>
             <a onclick="showSection('addProductSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navAddProduct"><i class="fa-solid fa-square-plus w-5 text-cyan-400"></i> Add Wholesale Product</a>
+            <a onclick="showSection('searchHistorySection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navSearchHistory"><i class="fa-solid fa-file-excel w-5 text-emerald-400"></i> Search History (Excel)</a>
             
             <!-- Master Menu Link -->
             <a href="panel.html" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300 border-t border-amber-500/10 mt-4">
@@ -163,6 +164,20 @@
                 <button onclick="publishNewProduct()" class="action-btn w-full py-3 rounded-xl text-xs font-black uppercase text-slate-950 shadow">Publish Product to Central Catalog</button>
             </div>
 
+            <!-- 4. SEARCH HISTORY EXCEL DOWNLOAD SECTION -->
+            <div id="searchHistorySection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <div class="border-b border-amber-500/20 pb-3">
+                    <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-file-excel mr-2"></i> Customer Search History & Analytics</h3>
+                    <p class="text-xs text-slate-400 mt-1">Download weekly customer search queries to check what products users are looking for.</p>
+                </div>
+                <div class="bg-black/50 p-4 rounded-xl border border-amber-500/20 space-y-3">
+                    <p class="text-xs text-slate-300">Click the button below to export all customer search records into an Excel-compatible CSV file.</p>
+                    <button onclick="downloadSearchHistoryCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-3 rounded-xl text-xs uppercase shadow-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Download Search History (Excel/CSV)
+                    </button>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -200,6 +215,7 @@
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('footerBannerSection').classList.add('hidden');
             document.getElementById('addProductSection').classList.add('hidden');
+            document.getElementById('searchHistorySection').classList.add('hidden');
 
             document.querySelectorAll('aside nav a').forEach(el => el.classList.remove('active'));
 
@@ -208,6 +224,7 @@
             if(sectionId === 'heroBannerSection') document.getElementById('navHero').classList.add('active');
             else if(sectionId === 'footerBannerSection') document.getElementById('navFooter').classList.add('active');
             else if(sectionId === 'addProductSection') document.getElementById('navAddProduct').classList.add('active');
+            else if(sectionId === 'searchHistorySection') document.getElementById('navSearchHistory').classList.add('active');
         }
 
         // Helper function to convert uploaded image file to Base64 string
@@ -216,7 +233,7 @@
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    callback(e.target.result); // Base64 string
+                    callback(e.target.result);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
@@ -227,48 +244,26 @@
         // Save Main Hero Banner
         function saveHeroBanner() {
             const link = document.getElementById('heroBannerLink').value;
-            
             convertImageToBase64('heroBannerFile', (base64Image) => {
-                const bannerData = {
-                    link: link,
-                    updatedAt: new Date()
-                };
-                
-                if (base64Image) {
-                    bannerData.image = base64Image;
-                }
+                const bannerData = { link: link, updatedAt: new Date() };
+                if (base64Image) bannerData.image = base64Image;
 
                 db.collection('settings').doc('hero_banner').set(bannerData, { merge: true })
-                .then(() => {
-                    alert("Main Hero Banner settings saved and published successfully!");
-                })
-                .catch(err => {
-                    alert("Error saving hero banner: " + err.message);
-                });
+                .then(() => alert("Main Hero Banner settings saved and published successfully!"))
+                .catch(err => alert("Error saving hero banner: " + err.message));
             });
         }
 
         // Save Footer Promo Banner
         function saveFooterBanner() {
             const link = document.getElementById('footerBannerLink').value;
-            
             convertImageToBase64('footerBannerFile', (base64Image) => {
-                const bannerData = {
-                    link: link,
-                    updatedAt: new Date()
-                };
-                
-                if (base64Image) {
-                    bannerData.image = base64Image;
-                }
+                const bannerData = { link: link, updatedAt: new Date() };
+                if (base64Image) bannerData.image = base64Image;
 
                 db.collection('settings').doc('footer_banner').set(bannerData, { merge: true })
-                .then(() => {
-                    alert("Footer Promo Banner settings saved and published successfully!");
-                })
-                .catch(err => {
-                    alert("Error saving footer banner: " + err.message);
-                });
+                .then(() => alert("Footer Promo Banner settings saved and published successfully!"))
+                .catch(err => alert("Error saving footer banner: " + err.message));
             });
         }
 
@@ -305,6 +300,32 @@
                 document.getElementById('prodStock').value = '';
                 document.getElementById('prodDesc').value = '';
             }).catch(err => alert("Error adding product: " + err.message));
+        }
+
+        // Download Search History as Excel/CSV
+        function downloadSearchHistoryCSV() {
+            db.collection('search_logs').orderBy('timestamp', 'desc').get().then(snapshot => {
+                if (snapshot.empty) {
+                    alert("No search history found yet.");
+                    return;
+                }
+
+                let csvContent = "data:text/csv;charset=utf-8,Search Query,Timestamp\n";
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const query = `"${(data.query || '').replace(/"/g, '""')}"`;
+                    const time = data.timestamp ? data.timestamp.toDate().toLocaleString() : 'N/A';
+                    csvContent += `${query},"${time}"\n`;
+                });
+
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `customer_search_history_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(err => alert("Error downloading search history: " + err.message));
         }
     </script>
 </body>
