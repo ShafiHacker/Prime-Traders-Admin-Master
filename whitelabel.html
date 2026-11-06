@@ -30,6 +30,7 @@
             <a onclick="showSection('heroBannerSection')" class="nav-link active flex items-center gap-3 px-6 py-3 text-slate-300" id="navHero"><i class="fa-solid fa-image w-5 text-amber-400"></i> Main Hero Banner</a>
             <a onclick="showSection('footerBannerSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navFooter"><i class="fa-solid fa-rectangle-ad w-5 text-amber-300"></i> Footer Promo Banner</a>
             <a onclick="showSection('addProductSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navAddProduct"><i class="fa-solid fa-square-plus w-5 text-cyan-400"></i> Add Wholesale Product</a>
+            <a onclick="showSection('todaysDealSection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navDeal"><i class="fa-solid fa-bolt w-5 text-amber-400"></i> Today's Deal & Timer</a>
             <a onclick="showSection('searchHistorySection')" class="nav-link flex items-center gap-3 px-6 py-3 text-slate-300" id="navSearchHistory"><i class="fa-solid fa-file-excel w-5 text-emerald-400"></i> Search History (Excel)</a>
             
             <!-- Master Menu Link -->
@@ -164,7 +165,38 @@
                 <button onclick="publishNewProduct()" class="action-btn w-full py-3 rounded-xl text-xs font-black uppercase text-slate-950 shadow">Publish Product to Central Catalog</button>
             </div>
 
-            <!-- 4. SEARCH HISTORY EXCEL DOWNLOAD SECTION -->
+            <!-- 4. TODAY'S DEAL & TIMER MANAGEMENT -->
+            <div id="todaysDealSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <div class="border-b border-amber-500/20 pb-3">
+                    <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-bolt mr-2"></i> Today's Deal & Timer Setup</h3>
+                    <p class="text-xs text-slate-400 mt-1">Configure Today's Deal product title, price, discount percentage, and countdown timer hours.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-300 uppercase">Deal Product Title *</label>
+                        <input type="text" id="dealTitle" placeholder="e.g. Wireless Neckband Earphones" class="w-full mt-1 p-2.5 bg-black border border-amber-500/30 rounded-xl text-xs text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-300 uppercase">Discounted Deal Price (PKR) *</label>
+                        <input type="number" id="dealPrice" placeholder="1999" class="w-full mt-1 p-2.5 bg-black border border-amber-500/30 rounded-xl text-xs text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-300 uppercase">Original Price (PKR) *</label>
+                        <input type="number" id="dealOrigPrice" placeholder="2799" class="w-full mt-1 p-2.5 bg-black border border-amber-500/30 rounded-xl text-xs text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-300 uppercase">Timer Hours Duration *</label>
+                        <input type="number" id="dealHours" placeholder="2" class="w-full mt-1 p-2.5 bg-black border border-amber-500/30 rounded-xl text-xs text-white outline-none">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-slate-300 uppercase">Deal Image *</label>
+                        <input type="file" id="dealImageFile" class="w-full mt-1 p-2 bg-black border border-amber-500/30 rounded-xl text-xs text-slate-300">
+                    </div>
+                </div>
+                <button onclick="saveTodaysDeal()" class="action-btn px-6 py-3 rounded-xl text-xs font-black uppercase text-slate-950 shadow">Save & Publish Today's Deal</button>
+            </div>
+
+            <!-- 5. SEARCH HISTORY EXCEL DOWNLOAD SECTION -->
             <div id="searchHistorySection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
                 <div class="border-b border-amber-500/20 pb-3">
                     <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-file-excel mr-2"></i> Customer Search History & Analytics</h3>
@@ -215,6 +247,7 @@
             document.getElementById('heroBannerSection').classList.add('hidden');
             document.getElementById('footerBannerSection').classList.add('hidden');
             document.getElementById('addProductSection').classList.add('hidden');
+            document.getElementById('todaysDealSection').classList.add('hidden');
             document.getElementById('searchHistorySection').classList.add('hidden');
 
             document.querySelectorAll('aside nav a').forEach(el => el.classList.remove('active'));
@@ -224,6 +257,7 @@
             if(sectionId === 'heroBannerSection') document.getElementById('navHero').classList.add('active');
             else if(sectionId === 'footerBannerSection') document.getElementById('navFooter').classList.add('active');
             else if(sectionId === 'addProductSection') document.getElementById('navAddProduct').classList.add('active');
+            else if(sectionId === 'todaysDealSection') document.getElementById('navDeal').classList.add('active');
             else if(sectionId === 'searchHistorySection') document.getElementById('navSearchHistory').classList.add('active');
         }
 
@@ -264,6 +298,34 @@
                 db.collection('settings').doc('footer_banner').set(bannerData, { merge: true })
                 .then(() => alert("Footer Promo Banner settings saved and published successfully!"))
                 .catch(err => alert("Error saving footer banner: " + err.message));
+            });
+        }
+
+        // Save Today's Deal & Timer Settings
+        function saveTodaysDeal() {
+            const title = document.getElementById('dealTitle').value;
+            const price = document.getElementById('dealPrice').value;
+            const origPrice = document.getElementById('dealOrigPrice').value;
+            const hours = document.getElementById('dealHours').value;
+
+            if (!title || !price || !origPrice || !hours) {
+                alert("Please fill out all required deal fields.");
+                return;
+            }
+
+            convertImageToBase64('dealImageFile', (base64Image) => {
+                const dealData = {
+                    title: title,
+                    price: parseFloat(price),
+                    originalPrice: parseFloat(origPrice),
+                    hoursDuration: parseFloat(hours),
+                    updatedAt: new Date()
+                };
+                if (base64Image) dealData.image = base64Image;
+
+                db.collection('settings').doc('todays_deal').set(dealData, { merge: true })
+                .then(() => alert("Today's Deal & Timer published successfully!"))
+                .catch(err => alert("Error saving deal: " + err.message));
             });
         }
 
