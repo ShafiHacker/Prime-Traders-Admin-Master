@@ -210,70 +210,69 @@
             else if(sectionId === 'addProductSection') document.getElementById('navAddProduct').classList.add('active');
         }
 
-       <script>
-    // Helper function to convert uploaded image file to Base64 string
-    function convertImageToBase64(fileInputId, callback) {
-        const fileInput = document.getElementById(fileInputId);
-        if (fileInput.files && fileInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                callback(e.target.result); // Base64 string
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            callback(null); // Agar image select nahi ki toh null bhejo
+        // Helper function to convert uploaded image file to Base64 string
+        function convertImageToBase64(fileInputId, callback) {
+            const fileInput = document.getElementById(fileInputId);
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    callback(e.target.result); // Base64 string
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                callback(null);
+            }
         }
-    }
 
-    // Save Main Hero Banner
-    function saveHeroBanner() {
-        const link = document.getElementById('heroBannerLink').value;
-        
-        convertImageToBase64('heroBannerFile', (base64Image) => {
-            const bannerData = {
-                link: link,
-                updatedAt: new Date()
-            };
+        // Save Main Hero Banner
+        function saveHeroBanner() {
+            const link = document.getElementById('heroBannerLink').value;
             
-            if (base64Image) {
-                bannerData.image = base64Image;
-            }
+            convertImageToBase64('heroBannerFile', (base64Image) => {
+                const bannerData = {
+                    link: link,
+                    updatedAt: new Date()
+                };
+                
+                if (base64Image) {
+                    bannerData.image = base64Image;
+                }
 
-            db.collection('settings').doc('hero_banner').set(bannerData, { merge: true })
-            .then(() => {
-                alert("Main Hero Banner settings saved and published successfully!");
-            })
-            .catch(err => {
-                alert("Error saving hero banner: " + err.message);
+                db.collection('settings').doc('hero_banner').set(bannerData, { merge: true })
+                .then(() => {
+                    alert("Main Hero Banner settings saved and published successfully!");
+                })
+                .catch(err => {
+                    alert("Error saving hero banner: " + err.message);
+                });
             });
-        });
-    }
+        }
 
-    // Save Footer Promo Banner
-    function saveFooterBanner() {
-        const link = document.getElementById('footerBannerLink').value;
-        
-        convertImageToBase64('footerBannerFile', (base64Image) => {
-            const bannerData = {
-                link: link,
-                updatedAt: new Date()
-            };
+        // Save Footer Promo Banner
+        function saveFooterBanner() {
+            const link = document.getElementById('footerBannerLink').value;
             
-            if (base64Image) {
-                bannerData.image = base64Image;
-            }
+            convertImageToBase64('footerBannerFile', (base64Image) => {
+                const bannerData = {
+                    link: link,
+                    updatedAt: new Date()
+                };
+                
+                if (base64Image) {
+                    bannerData.image = base64Image;
+                }
 
-            db.collection('settings').doc('footer_banner').set(bannerData, { merge: true })
-            .then(() => {
-                alert("Footer Promo Banner settings saved and published successfully!");
-            })
-            .catch(err => {
-                alert("Error saving footer banner: " + err.message);
+                db.collection('settings').doc('footer_banner').set(bannerData, { merge: true })
+                .then(() => {
+                    alert("Footer Promo Banner settings saved and published successfully!");
+                })
+                .catch(err => {
+                    alert("Error saving footer banner: " + err.message);
+                });
             });
-        });
-    }
-</script>
+        }
 
+        // Publish New Product
         function publishNewProduct() {
             const title = document.getElementById('prodTitle').value;
             const category = document.getElementById('prodCategory').value;
