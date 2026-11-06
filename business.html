@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business & Operations Hub | Prime Traders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar { background: linear-gradient(180deg, #090d16, #020617); border-right: 1px solid rgba(16, 185, 129, 0.2); }
+        .nav-link { transition: all 0.2s ease; cursor: pointer; }
+        .nav-link:hover, .nav-link.active { background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), transparent); border-left: 4px solid #10b981; color: #34d399; }
+        .panel-card { background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(3, 7, 18, 0.98)); border: 1px solid rgba(16, 185, 129, 0.25); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .action-btn { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
+        .action-btn:hover { filter: brightness(1.15); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+    </style>
+</head>
+<body class="bg-[#020617] text-slate-100 min-h-screen flex font-sans">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 sidebar hidden md:flex flex-col fixed h-screen z-30">
+        <div class="p-4 border-b border-emerald-500/20 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 text-lg font-black shadow-lg shadow-emerald-500/30"><i class="fa-solid fa-briefcase"></i></div>
+            <div>
+                <h1 class="text-xs font-black tracking-wider uppercase text-white leading-none">Prime Traders</h1>
+                <p class="text-[9px] text-emerald-400 font-bold uppercase tracking-widest mt-1">Operations Hub</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 py-3 space-y-1 overflow-y-auto text-xs font-bold scrollbar-thin">
+            <!-- Business Overview -->
+            <a onclick="showSection('overviewSection')" class="nav-link active flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navOverview"><i class="fa-solid fa-chart-pie w-5 text-emerald-400"></i> Business Overview</a>
+            
+            <!-- Products & Catalog -->
+            <a onclick="showSection('catalogSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navCatalog"><i class="fa-solid fa-box-open w-5 text-cyan-400"></i> Product Catalog</a>
+            
+            <!-- Orders Management -->
+            <a onclick="showSection('myOrdersSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navMyOrders"><i class="fa-solid fa-list-check w-5 text-blue-400"></i> My Orders</a>
+            <a onclick="showSection('allOrdersSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navAllOrders"><i class="fa-solid fa-boxes-stacked w-5 text-indigo-400"></i> All Orders</a>
+            <a onclick="showSection('addOrderSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navAddOrder"><i class="fa-solid fa-cart-plus w-5 text-amber-400"></i> Add Order</a>
+            <a onclick="showSection('newBookingSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navNewBooking"><i class="fa-solid fa-calendar-plus w-5 text-teal-400"></i> New Order Booking</a>
+            <a onclick="showSection('bulkUploadSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navBulkUpload"><i class="fa-solid fa-upload w-5 text-purple-400"></i> Bulk Upload</a>
+            <a onclick="showSection('excelUploadSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navExcelUpload"><i class="fa-solid fa-file-excel w-5 text-emerald-300"></i> Excel Order Upload</a>
+
+            <!-- Wallet & Payments -->
+            <a onclick="showSection('walletSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navWallet"><i class="fa-solid fa-wallet w-5 text-amber-300"></i> My Wallet & Balance</a>
+            <a onclick="showSection('transactionsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navTransactions"><i class="fa-solid fa-receipt w-5 text-yellow-400"></i> Transactions</a>
+            <a onclick="showSection('codPaymentsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navCodPayments"><i class="fa-solid fa-money-bill-wave w-5 text-emerald-400"></i> COD Payments</a>
+            <a onclick="showSection('settlementsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navSettlements"><i class="fa-solid fa-hand-holding-dollar w-5 text-cyan-300"></i> Payment Settlements</a>
+            
+            <!-- Returns & Reports -->
+            <a onclick="showSection('returnsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navReturns"><i class="fa-solid fa-rotate-left w-5 text-rose-400"></i> Return Management</a>
+            <a onclick="showSection('reportsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navReports"><i class="fa-solid fa-chart-line w-5 text-violet-400"></i> Sales & Profit Reports</a>
+
+            <!-- Support & Settings -->
+            <a onclick="showSection('supportSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navSupport"><i class="fa-solid fa-headset w-5 text-pink-400"></i> Help & Complaints</a>
+            <a onclick="showSection('settingsSection')" class="nav-link flex items-center gap-3 px-5 py-2.5 text-slate-300" id="navSettings"><i class="fa-solid fa-gear w-5 text-slate-400"></i> Account Settings</a>
+
+            <!-- Master Menu Link -->
+            <a href="panel.html" class="nav-link flex items-center gap-3 px-5 py-3 text-slate-300 border-t border-emerald-500/10 mt-3"><i class="fa-solid fa-arrow-left w-5 text-rose-400"></i> Master Menu</a>
+        </nav>
+
+        <div class="p-3 border-t border-emerald-500/20">
+            <button onclick="auth.signOut().then(() => window.location.href = 'index.html')" class="w-full bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-500/40 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout Admin
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        
+        <!-- Header Bar -->
+        <header class="bg-[#090d16] border-b border-emerald-500/20 sticky top-0 z-20 px-6 py-3 flex justify-between items-center shadow-md">
+            <span class="text-xs font-black uppercase text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 rounded-lg">Business & Operations Control</span>
+            <span id="adminEmailDisplay" class="text-xs text-slate-400 font-mono">Admin Session Active</span>
+        </header>
+
+        <!-- Main Content Sections -->
+        <main class="flex-1 p-6 max-w-5xl w-full mx-auto space-y-6">
+
+            <!-- 1. BUSINESS OVERVIEW SECTION -->
+            <div id="overviewSection" class="panel-card p-6 rounded-2xl space-y-4">
+                <h3 class="text-sm font-black text-emerald-400 uppercase tracking-wider"><i class="fa-solid fa-chart-pie mr-2"></i> Business Overview</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-black/40 p-4 rounded-xl border border-emerald-500/20">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold">Total Sales Revenue</span>
+                        <h4 class="text-xl font-black text-white mt-1">PKR 0</h4>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-xl border border-emerald-500/20">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold">Net Profit</span>
+                        <h4 class="text-xl font-black text-emerald-400 mt-1">PKR 0</h4>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-xl border border-emerald-500/20">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold">Active Orders</span>
+                        <h4 class="text-xl font-black text-cyan-400 mt-1">0</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PRODUCT CATALOG SECTION -->
+            <div id="catalogSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-cyan-400 uppercase tracking-wider"><i class="fa-solid fa-box-open mr-2"></i> Product Catalog</h3>
+                <p class="text-xs text-slate-300">Browse and manage all available wholesale inventory items.</p>
+            </div>
+
+            <!-- 3. MY ORDERS SECTION -->
+            <div id="myOrdersSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-blue-400 uppercase tracking-wider"><i class="fa-solid fa-list-check mr-2"></i> My Orders</h3>
+                <p class="text-xs text-slate-300">View orders placed by your account operators.</p>
+            </div>
+
+            <!-- 4. ALL ORDERS SECTION -->
+            <div id="allOrdersSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-indigo-400 uppercase tracking-wider"><i class="fa-solid fa-boxes-stacked mr-2"></i> All Orders Management</h3>
+                <p class="text-xs text-slate-300">Complete list of customer orders across all channels.</p>
+            </div>
+
+            <!-- 5. ADD ORDER SECTION -->
+            <div id="addOrderSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-cart-plus mr-2"></i> Add Single Order</h3>
+                <p class="text-xs text-slate-300">Form to add a new manual order.</p>
+            </div>
+
+            <!-- 6. NEW ORDER BOOKING SECTION -->
+            <div id="newBookingSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-teal-400 uppercase tracking-wider"><i class="fa-solid fa-calendar-plus mr-2"></i> New Order Booking</h3>
+                <p class="text-xs text-slate-300">Book express shipments and courier parcels.</p>
+            </div>
+
+            <!-- 7. BULK UPLOAD SECTION -->
+            <div id="bulkUploadSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-purple-400 uppercase tracking-wider"><i class="fa-solid fa-upload mr-2"></i> Bulk Upload Inventory / Orders</h3>
+                <p class="text-xs text-slate-300">Upload multiple entries simultaneously.</p>
+            </div>
+
+            <!-- 8. EXCEL ORDER UPLOAD SECTION -->
+            <div id="excelUploadSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-emerald-300 uppercase tracking-wider"><i class="fa-solid fa-file-excel mr-2"></i> Excel Order Upload</h3>
+                <p class="text-xs text-slate-300">Import orders directly via Excel/CSV sheets.</p>
+            </div>
+
+            <!-- 9. MY WALLET SECTION -->
+            <div id="walletSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-amber-300 uppercase tracking-wider"><i class="fa-solid fa-wallet mr-2"></i> My Wallet & Balance</h3>
+                <p class="text-xs text-slate-300">Current available wallet balance and financial overview.</p>
+            </div>
+
+            <!-- 10. TRANSACTIONS SECTION -->
+            <div id="transactionsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-yellow-400 uppercase tracking-wider"><i class="fa-solid fa-receipt mr-2"></i> Transactions History</h3>
+                <p class="text-xs text-slate-300">Ledger of all debit and credit transactions.</p>
+            </div>
+
+            <!-- 11. COD PAYMENTS SECTION -->
+            <div id="codPaymentsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-emerald-400 uppercase tracking-wider"><i class="fa-solid fa-money-bill-wave mr-2"></i> COD Payments</h3>
+                <p class="text-xs text-slate-300">Cash on Delivery collections and status.</p>
+            </div>
+
+            <!-- 12. PAYMENT SETTLEMENTS SECTION -->
+            <div id="settlementsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-cyan-300 uppercase tracking-wider"><i class="fa-solid fa-hand-holding-dollar mr-2"></i> Payment Settlements</h3>
+                <p class="text-xs text-slate-300">Courier and vendor payout settlements.</p>
+            </div>
+
+            <!-- 13. RETURN MANAGEMENT SECTION -->
+            <div id="returnsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-rose-400 uppercase tracking-wider"><i class="fa-solid fa-rotate-left mr-2"></i> Return Management</h3>
+                <p class="text-xs text-slate-300">Manage returned parcels and customer exchanges.</p>
+            </div>
+
+            <!-- 14. SALES & PROFIT REPORTS SECTION -->
+            <div id="reportsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-violet-400 uppercase tracking-wider"><i class="fa-solid fa-chart-line mr-2"></i> Sales & Profit Reports</h3>
+                <p class="text-xs text-slate-300">Detailed analytics and exportable financial reports.</p>
+            </div>
+
+            <!-- 15. HELP & COMPLAINTS SECTION -->
+            <div id="supportSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-pink-400 uppercase tracking-wider"><i class="fa-solid fa-headset mr-2"></i> Help, Support & Complaints</h3>
+                <p class="text-xs text-slate-300">Raise tickets and resolve operational queries.</p>
+            </div>
+
+            <!-- 16. ACCOUNT SETTINGS SECTION -->
+            <div id="settingsSection" class="panel-card p-6 rounded-2xl space-y-4 hidden">
+                <h3 class="text-sm font-black text-slate-300 uppercase tracking-wider"><i class="fa-solid fa-gear mr-2"></i> Account Settings</h3>
+                <p class="text-xs text-slate-300">Manage profile details and security credentials.</p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcb38R8nTN-6wJxqy6L5wnB55JQ8qwcjM",
+            authDomain: "prime-traders-f3eec.firebaseapp.com",
+            projectId: "prime-traders-f3eec",
+            storageBucket: "prime-traders-f3eec.firebasestorage.app",
+            messagingSenderId: "499740236001",
+            appId: "1:499740236001:web:e623dfe1f6f96df22ffa0",
+            measurementId: "G-6CGVKBZFJK"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const auth = firebase.auth();
+
+        // Section Toggler
+        function showSection(secId) {
+            const sections = [
+                'overviewSection', 'catalogSection', 'myOrdersSection', 'allOrdersSection', 
+                'addOrderSection', 'newBookingSection', 'bulkUploadSection', 'excelUploadSection', 
+                'walletSection', 'transactionsSection', 'codPaymentsSection', 'settlementsSection', 
+                'returnsSection', 'reportsSection', 'supportSection', 'settingsSection'
+            ];
+            
+            sections.forEach(s => {
+                const el = document.getElementById(s);
+                if(el) el.classList.add('hidden');
+            });
+
+            document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('active'));
+
+            const target = document.getElementById(secId);
+            if(target) target.classList.remove('hidden');
+
+            // Highlight nav link
+            event.currentTarget.classList.add('active');
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const disp = document.getElementById('adminEmailDisplay');
+                if(disp) disp.innerText = `Admin: ${user.email}`;
+            }
+        });
+    </script>
+</body>
+</html>
